@@ -1,7 +1,10 @@
 describe('Airport', function() {
   beforeEach(function() {
+    weather = new Weather();
     plane = new Plane();
-    airport = new Airport('sunny');
+    plane2 = new Plane();
+    airport = new Airport();
+    airportSmall = new Airport(1);
   })
 
   describe('#capacity', function(){
@@ -9,8 +12,7 @@ describe('Airport', function() {
       expect(airport.showCapacity()).toBe(20);
     })
     it('can specify a different default capacity', function() {
-      airport_2 = new Airport('sunny', 100);
-      expect(airport_2.showCapacity()).toBe(100);
+      expect(airportSmall.showCapacity()).toBe(1);
     })
   })
 
@@ -21,9 +23,9 @@ describe('Airport', function() {
     })
 
     it('doesnt let planes land when full', function() {
-      airport_3 = new Airport('sunny', 1);
-      airport_3.land(plane);
-      expect ( function() {airport_3.land(plane); }).toThrow(new Error("Airport full."));
+
+      airportSmall.land(plane);
+      expect ( function() {airportSmall.land(plane); }).toThrow(new Error("Airport full."));
     })
   })
 
@@ -40,33 +42,34 @@ describe('Airport', function() {
                           }).toThrow(new Error("Airport empty."))
     })
 
-    it('only allows planes in airport to take off', function(){
-      plane_2 = new Plane();
-      airport.land(plane);
-      airport_2 = new Airport('sunny');
-      airport_2.land(plane_2);
-      expect (function() {
-                  airport_2.takeoff(plane);
-                    }).toThrow(new Error("Plane not in airport."))
-
-    })
-
     it('does not allow takeoff of flying planes', function(){
-      plane_2 = new Plane();
-      airport.land(plane_2);
-
+      plane2 = new Plane();
+      airport.land(plane2);
       expect (function() {
                   airport.takeoff(plane);
                 }).toThrow(new Error("Plane airborne."))
     })
+
+  it('only allows planes in airport to take off', function(){
+    airport.land(plane);
+    airportSmall.land(plane2);
+    expect (function() {
+                airportSmall.takeoff(plane);
+                  }).toThrow(new Error("Plane not in airport."))
+        })
+
   })
 
   describe('weather', function() {
-
     it('prevents landing when stormy', function(){
-      airport_4 = new Airport('stormy');
+      var weather = new Weather();
+      weather.isStormy = function(){
+        return false;
+      };
+      var airport = new Airport(20, weather);
+      console.log(airport)
       expect( function(){
-                  airport_4.land(plane);
+                  airport.land(plane);
                 }).toThrow(new Error("Too stormy to land."))
     })
   })

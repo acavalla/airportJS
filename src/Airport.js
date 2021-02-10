@@ -1,9 +1,9 @@
 class Airport {
-  constructor(weather, capacity = 20) {
+  constructor(capacity = 20, weather = new Weather()) {
     this.capacity = capacity
     this.planes = []
-    weather = new Weather(weather);
-    this.weather = weather.showWeather();
+    this.weather = weather.isStormy;
+    //this.weather = weather.showWeather();
   }
 
   planesInAirport() {
@@ -19,7 +19,7 @@ class Airport {
   }
 
   land(plane) {
-    if (this.weather === "stormy") {
+    if (this.weather === "true") {
       throw new Error ('Too stormy to land.')
     }
     if(this.planes.length === this.capacity) {
