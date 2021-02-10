@@ -1,10 +1,13 @@
 describe('Airport', function() {
   beforeEach(function() {
     weather = new Weather();
+    weather.isStormy = function(){
+      return false;
+    };
     plane = new Plane();
     plane2 = new Plane();
-    airport = new Airport();
-    airportSmall = new Airport(1);
+    airport = new Airport(20, weather);
+    airportSmall = new Airport(1, weather);
   })
 
   describe('#capacity', function(){
@@ -62,12 +65,11 @@ describe('Airport', function() {
 
   describe('weather', function() {
     it('prevents landing when stormy', function(){
-      var weather = new Weather();
-      weather.isStormy = function(){
-        return false;
+      var weatherStormy = new Weather();
+      weatherStormy.isStormy = function(){
+        return true;
       };
-      var airport = new Airport(20, weather);
-      console.log(airport)
+      var airport = new Airport(20, weatherStormy);
       expect( function(){
                   airport.land(plane);
                 }).toThrow(new Error("Too stormy to land."))

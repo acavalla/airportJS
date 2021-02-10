@@ -1,8 +1,12 @@
 describe('Plane', function() {
 
   beforeEach(function() {
+    weather = new Weather();
+    weather.isStormy = function(){
+      return false;
+    };
     plane = new Plane();
-    airport = new Airport('sunny');
+    airport = new Airport(20, weather);
   })
 
   it('can check the status of a plane', function() {
