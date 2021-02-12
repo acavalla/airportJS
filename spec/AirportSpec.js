@@ -1,10 +1,18 @@
+'use strict';
+
 describe('Airport', function() {
+  var weather;
+  var plane;
+  var plane2;
+  var airport;
+  var airportSmall;
+
   beforeEach(function() {
     weather = new Weather();
     weather.isStormy = function(){
       return false;
     };
-    plane = new Plane();
+    plane = jasmine.createSpy('plane',['land']);
     plane2 = new Plane();
     airport = new Airport(20, weather);
     airportSmall = new Airport(1, weather);
@@ -22,11 +30,11 @@ describe('Airport', function() {
   describe('#landing', function() {
     it('lands planes', function() {
       airport.land(plane);
+      expect(airport.planesInAirport().length).toBe(1);
       expect(airport.planesInAirport()[0]).toBe(plane);
     })
 
     it('doesnt let planes land when full', function() {
-
       airportSmall.land(plane);
       expect ( function() {airportSmall.land(plane); }).toThrow(new Error("Airport full."));
     })
@@ -43,14 +51,6 @@ describe('Airport', function() {
       expect (function() {
                   airport.takeoff(plane);
                           }).toThrow(new Error("Airport empty."))
-    })
-
-    it('does not allow takeoff of flying planes', function(){
-      plane2 = new Plane();
-      airport.land(plane2);
-      expect (function() {
-                  airport.takeoff(plane);
-                }).toThrow(new Error("Plane airborne."))
     })
 
   it('only allows planes in airport to take off', function(){

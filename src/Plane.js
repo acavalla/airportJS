@@ -1,17 +1,21 @@
+'use strict';
+
 class Plane {
   constructor() {
-    this.status = "In The Air"
+    this.status = "In The Air";
   }
 
-  landed() {
-    this.status = "In airport"
+  land(airport) {
+    airport.land(this);
+    this.status = airport;
   }
 
   takeoff() {
-    this.status = "In The Air"
+    this.status.takeoff(this);
+    this.status = "In The Air";
   }
 
   showStatus() {
-    return this.status 
+    return this.status;
   }
 }

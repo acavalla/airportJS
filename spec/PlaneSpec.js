@@ -1,37 +1,31 @@
+'use strict';
+
 describe('Plane', function() {
+  // var weather;
+  var plane;
+  var airport;
 
   beforeEach(function() {
-    weather = new Weather();
-    weather.isStormy = function(){
-      return false;
-    };
+    // weather = new Weather();
+    // weather.isStormy = function(){
+    //   return false;
+    // };
     plane = new Plane();
-    airport = new Airport(20, weather);
+    airport = jasmine.createSpyObj('airport',['land', 'takeoff']);
   })
 
-  it('can check the status of a plane', function() {
+  it('changes status of the plane after landing and takeoff', function() {
+    plane.land(airport);
+    expect(plane.showStatus()).toBe(airport)
+    plane.takeoff(airport);
     expect(plane.showStatus()).toBe("In The Air");
   })
 
-  it('shows status as in airport after landing', function() {
-    plane.landed();
-    expect(plane.showStatus()).toBe("In airport")
-  })
-
-  it('changes the status of the plane on landing', function() {
-    airport.land(plane)
-    expect(plane.showStatus()).toBe("In airport")
-  })
-
-  it('shows status as in the air after takeoff', function() {
-    plane.takeoff();
-    expect(plane.showStatus()).toBe("In The Air");
-  })
-
-  it('changes the status of the plane on takeoff', function() {
-    airport.land(plane)
-    airport.takeoff(plane);
-    expect(plane.showStatus()).toBe("In The Air");
+  it('calls a method on the airport', function() {
+    plane.land(airport);
+    expect(airport.land).toHaveBeenCalledWith(plane);
+    plane.takeoff(airport);
+    expect(airport.takeoff).toHaveBeenCalledWith(plane);
   })
 
 })
